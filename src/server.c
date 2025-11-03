@@ -34,7 +34,7 @@ int start_server() {
         return -1;
     }
 
-    printf("Serveur en écoute sur le port %d...\n", PORT);
+    printf("Serveur en écoute sur le port %d...\n http://localhost:%d\n", PORT,PORT);
 
     while (1) {
         int client_fd = accept(server_fd, NULL, NULL);
@@ -51,7 +51,10 @@ int start_server() {
 }
 
 int handle_client(int client_fd) {
-    char buffer[1024] = {0};
+    char buffer[1024] = "GET / HTTP/1.1\r\n"
+                        "Host: localhost\r\n"
+                        "Connection: close\r\n"
+                        "\r\n";
     read(client_fd, buffer, sizeof(buffer) - 1);
     printf("Requête reçue :\n%s\n", buffer);
 
@@ -61,7 +64,6 @@ int handle_client(int client_fd) {
             "\r\n"
             "<html><body>"
             "<h1>Hello tout le monde!</h1>"
-            "<div><textarea id=\"story\" name=\"story\" rows=\"5\" cols=\"33\"></textarea><button>Interpreter</button></div>"
             "<div></div>"
             "</body></html>";
 
@@ -69,5 +71,3 @@ int handle_client(int client_fd) {
 
     return 0;
 }
-
-//system(python monsctipt)
